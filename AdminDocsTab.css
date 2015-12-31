@@ -1,10 +1,11 @@
 /* @import url(https://fonts.googleapis.com/css?family=Roboto:400,700); */
 @import url(https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700);
-
+@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,700);
 
 #content .WireTabs #_AdminDocsTabDocs {
-  color: #a00aea;
-  font-weight: bolder;
+/*   color: #a00aea; */
+  color: #5CC7B2;
+/*   font-weight: bolder; */
 }
 
 #content .WireTabs #_AdminDocsTabDocs:before {
@@ -50,6 +51,12 @@ li#AdminDocsTabDocs div.doc-container {
     margin-bottom: 10px;
 }
 
+#docs div.doc-edit {
+	float:right;
+	font-size:.95em;
+}
+
+
 #AdminDocsTabDocs .InputfieldContent #docs ul li:before {
  content: "\0BB \020";
  }
@@ -87,7 +94,7 @@ li#AdminDocsTabDocs div.doc-container {
   margin-top: 20px;
   margin-bottom: 20px;
   border: 0;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #c2c2c2;
 }
 
 #docs h1,
@@ -97,26 +104,35 @@ li#AdminDocsTabDocs div.doc-container {
 #docs h5,
 #docs h6
 {
-	font-family: inherit;
+/* 	font-family: inherit; */
+	font-family: Raleway,sans-serif;
 	font-weight: 500;
 	line-height: 1.1;
-	color: inherit;
+	color: #000;
+	letter-spacing: 2px;
 }
+
+#docs h5 {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
 
 #docs h1,
 #docs h2,
 #docs h3
 {
-  margin-top: 20px;
-  margin-bottom: 10px;
+
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 #docs h4,
 #docs h5,
 #docs h6
 {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #docs h1 {font-size: 36px;}
@@ -125,17 +141,37 @@ li#AdminDocsTabDocs div.doc-container {
 #docs h4 {font-size: 18px;}
 #docs h5 {font-size: 14px;}
 #docs h6 {font-size: 12px;}
-#docs p  {margin: 0 0 10px;}
+#docs p  {margin: 0 0 20px;}
 
-#docs blockquote {
-  font: 14px/22px normal Times, "Times New Roman", serif;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  padding-left: 15px;
-  border-left: 3px solid #ccc;
+
+#docs h1 {
+	font-family: inherit;
+	font-size: 28px;
+	border-bottom: 1px solid #DDD;
+	padding-bottom: 16px;
+	text-transform: uppercase;
 }
 
+#docs h1 i {
+	color: #5CC7B2;
+	font-size: 28px !important;
+}
+
+
+
+#docs blockquote {
+	font-family: 'Raleway', sans-serif;
+	padding: 10px 20px;
+	margin: 20px 0px 20px;
+	font-size: 17.5px;
+	border-left: 5px solid #ab00ba;
+}
+#docs blockquote p {
+	margin: 0;
+}
+
+
+/* Docs Page */
 
 #docs .cbp-ntcontent ol,
 #docs .cbp-ntcontent ul  {

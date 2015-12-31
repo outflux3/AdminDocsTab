@@ -104,15 +104,15 @@ class AdminDocsTab extends WireData implements Module, ConfigurableModule {
 			$docLink = wire('config')->urls->admin . 'page/edit/?id=';
 			foreach($docs as $doc) {
 				$body .= '<div id="docs" class="doc-container">';
-				$body .= "<h2>{$doc->title}</h2>";
+				$body .= "<h1><i class='fa fa-file-text-o'></i> {$doc->title}</h1>";
 				$body .= $doc->body;
-				$body .= '<div style="float:right;font-size:11px;">';
-				$body .= "<a href='{$docLink}{$doc->id}' target='_blank'>Edit: {$doc->title}</a></div>";
+				$body .= '<div class="doc-edit">';
+				$body .= "<a href='{$docLink}{$doc->id}' target='_blank'><i class='fa fa-pencil'></i> Edit: {$doc->title}</a></div>";
 				$body .= '</div>';
 			}
 			$field->markupText = $body;
 		} else {
-			$docsAdd = wire('config')->urls->admin . 'page/add/?parent_id=1949';
+			$docsAdd = wire('config')->urls->admin . 'page/add/?parent_id=' . $savedPageID;
 			$field->markupText = "<h2>No applicable docs found</h2>";
 			$field->markupText .= "<br> <a href='$docsAdd'>";
 			$field->markupText .= '<button class="ui-button ui-widget ui-corner-all ui-state-default" name="button" value="Add New" type="button"><span class="ui-button-text"><i class="fa fa-plus-circle"></i> Add New Doc</span></button>';
