@@ -1,0 +1,178 @@
+<?php
+
+/**
+ * ProcessWire Page Docs Tab
+ *
+ * A little addon to display docs relevant to the page being edited.
+ *
+ * @copyright Copyright (c) 2015, Macrura/Outflux3
+ *
+ */
+
+class AdminDocsTab extends WireData implements Module, ConfigurableModule {
+
+	/**
+	 * @var Page Page being edited
+	 *
+	 */
+	private $editedPage;
+	protected $docsRoot;
+
+	/**
+	 * Return information about this module (required)
+	 *
+	 * @return array
+	 *
+	 */
+	static public function getModuleInfo() {
+		return array(
+			'title'    => 'Admin Docs Tab',
+			'summary'  => 'Adds a tab with related documentation.',
+			'version'  => 100,
+			'author'   => 'Macrura',
+			'autoload' => true
+		);
+	}
+
+	/**
+	 * __construct() is the right place to init config vars before they'll get populated
+	 *
+	 */
+	public function __construct() {
+		$this->enabledTemplates = array();
+		$this->docsRoot = '';
+	}
+
+	/**
+	 * init() is called when PW's API is ready
+	 *
+	 */
+	public function init() {
+
+	}
+
+	/**
+	 * ready() is called when both PW's API is ready and $page object is initialized (for autoload modules!)
+	 * Add the hook here to be able to skip it based on the template of the edited page.
+	 *
+	 */
+	public function ready() {
+		// we're interested in page editor only
+		if(wire('page')->process != 'ProcessPageEdit') return;
+
+		// skip changing templates (only target the actual edit form)
+		$id = (int)$this->input->get('id');
+		if(!$id) return;
+
+		// wire('page') would be the page with ProcessPageEdit
+		// GET parameter id tells the page that's being edited
+		$this->editedPage = wire('pages')->get($id);
+
+		// don't even consider system templates
+		if($this->editedPage->template->flags & Template::flagSystem) return;
+
+		// hook only if
+		// 1) no templates have been chosen (=all enabled) OR
+		// 2) the template of the edited page has been chosen
+		if(count($this->enabledTemplates) == 0 or
+		   in_array($this->editedPage->template->name, $this->enabledTemplates)) {
+			$this->addHookAfter('ProcessPageEdit::buildForm', $this, 'hookBuildForm');
+		}
+	}
+
+	/**
+	 * Add References tab to page edit form
+	 *
+	 */
+	public function hookBuildForm(HookEvent $event) {
+		// get the InputFieldForm object from the event (return value of buildForm())
+		$configData = $this->wire('modules')->getModuleConfigData($this);
+		$savedPageID = (int) $configData['docsRoot'];
+		$form = $event->return;
+
+		// create the tab
+		$docTab = new InputfieldWrapper();
+		$docTab->attr('id', $this->className() . 'Docs');
+		$docTab->attr('title', $this->_('Docs'));
+		$field = $this->modules->get("InputfieldMarkup");
+
+		//$docs = wire('pages')->find("template=doc, template_select={$this->editedPage->template->id}");
+		$docs = wire('pages')->find("has_parent=$savedPageID, template_select={$this->editedPage->template->id}");
+
+		if(count($docs)) {
+			$body = '';
+			$docLink = wire('config')->urls->admin . 'page/edit/?id=';
+			foreach($docs as $doc) {
+				$body .= '<div id="docs" class="doc-container">';
+				$body .= "<h2>{$doc->title}</h2>";
+				$body .= $doc->body;
+				$body .= '<div style="float:right;font-size:11px;">';
+				$body .= "<a href='{$docLink}{$doc->id}' target='_blank'>Edit: {$doc->title}</a></div>";
+				$body .= '</div>';
+			}
+			$field->markupText = $body;
+		} else {
+			$docsAdd = wire('config')->urls->admin . 'page/add/?parent_id=1949';
+			$field->markupText = "<h2>No applicable docs found</h2>";
+			$field->markupText .= "<br> <a href='$docsAdd'>";
+			$field->markupText .= '<button class="ui-button ui-widget ui-corner-all ui-state-default" name="button" value="Add New" type="button"><span class="ui-button-text"><i class="fa fa-plus-circle"></i> Add New Doc</span></button>';
+			$field->markupText .= '</a>';
+		}
+
+		// append the markup to the tab and the tab to the form
+		$docTab->append($field);
+		$form->prepend($docTab);
+
+		$this->config->styles->add($this->config->urls->siteModules . __CLASS__ . '/' . __CLASS__ . '.css?v=' . time());
+
+	}
+
+
+	/**
+	 * Return an InputfieldsWrapper of Inputfields used to configure the class
+	 *
+	 * @param array $data Array of config values indexed by field name
+	 * @return InputfieldsWrapper
+	 *
+	 */
+	public static function getModuleConfigInputfields(array $data) {
+		$wrapper = new InputfieldWrapper();
+
+		$fieldEnabledTemplates = wire('modules')->get('InputfieldAsmSelect');
+		$fieldEnabledTemplates->attr('name+id', 'enabledTemplates');
+		$fieldEnabledTemplates->label = __('Enabled templates', __FILE__);
+		$fieldEnabledTemplates->description = __('"Docs" tab will only be shown for chosen templates. If no template is chosen, "Docs" tab will be shown for all templates.', __FILE__);
+		$fieldEnabledTemplates->attr('title', __('Enable template', __FILE__));
+		$fieldEnabledTemplates->setAsmSelectOption('sortable', false);
+
+		// populate with all available templates
+		foreach(wire('templates') as $t) {
+			// filter out system templates
+			if(!($t->flags & Template::flagSystem)) $fieldEnabledTemplates->addOption($t->name);
+		}
+		if(isset($data['enabledTemplates'])) $fieldEnabledTemplates->value = $data['enabledTemplates'];
+
+		$wrapper->add($fieldEnabledTemplates);
+
+		// make a field to set the root of the docs pages
+
+		//$p = 'selected';
+		//$parentId = wire('pages')->get('/')->id;
+
+		$fieldDocsRoot = wire('modules')->get('InputfieldPageListSelect');
+		$fieldDocsRoot->attr('name+id', 'docsRoot');
+		$fieldDocsRoot->label = __('Docs Root', __FILE__);
+		$fieldDocsRoot->description = __('Select the root page of your docs. (Allows the module to know where to create new docs.', __FILE__);
+		$fieldDocsRoot->attr('title', __('Docs root', __FILE__));
+		//$fieldDocsRoot->set('parent_id', $parentId);
+
+		$data = wire('modules')->getModuleConfigData('AdminDocsTab');
+		$savedPageID = (int) $data['docsRoot'];// name of our input above
+		$fieldDocsRoot->attr('value', $savedPageID);// (int) Saved paged ID
+
+		$wrapper->add($fieldDocsRoot);
+
+		return $wrapper;
+	}
+
+}
