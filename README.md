@@ -1,9 +1,7 @@
 AdminDocsTab module for ProcessWire
 ================
 
-Admin helper to add help tab and optional docs page in [ProcessWire CMS](http://processwire.com/).
-
-### Processwire helper modules for managing documentation
+Processwire helper modules for managing site documentation in [ProcessWire CMS](http://processwire.com/).
 
 ## Instructions
 
