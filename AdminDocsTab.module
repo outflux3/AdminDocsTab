@@ -167,9 +167,10 @@ class AdminDocsTab extends WireData implements Module, ConfigurableModule {
 		//$fieldDocsRoot->set('parent_id', $parentId);
 
 		$data = wire('modules')->getModuleConfigData('AdminDocsTab');
-		$savedPageID = (int) $data['docsRoot'];// name of our input above
-		$fieldDocsRoot->attr('value', $savedPageID);// (int) Saved paged ID
-
+		if (array_key_exists('docsRoot', $data)) {
+			$savedPageID = (int) $data['docsRoot'];// name of our input above
+			$fieldDocsRoot->attr('value', $savedPageID);// (int) Saved paged ID
+		}
 		$wrapper->add($fieldDocsRoot);
 
 		return $wrapper;

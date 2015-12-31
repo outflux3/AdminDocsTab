@@ -48,12 +48,7 @@ li#AdminDocsTabDocs div.doc-container {
 #docs ul, #docs ol {
     font-weight: 400 !important;
     padding-left: 15px;
-    margin-bottom: 10px;
-}
-
-#docs div.doc-edit {
-	float:right;
-	font-size:.95em;
+    margin: 0 0 20px 0;
 }
 
 
@@ -124,7 +119,7 @@ li#AdminDocsTabDocs div.doc-container {
 {
 
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 #docs h4,
@@ -157,8 +152,6 @@ li#AdminDocsTabDocs div.doc-container {
 	font-size: 28px !important;
 }
 
-
-
 #docs blockquote {
 	font-family: 'Raleway', sans-serif;
 	padding: 10px 20px;
@@ -170,6 +163,10 @@ li#AdminDocsTabDocs div.doc-container {
 	margin: 0;
 }
 
+#docs div.doc-edit {
+	float:right;
+	font-size:.95em;
+}
 
 /* Docs Page */
 
