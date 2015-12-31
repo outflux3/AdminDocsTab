@@ -2,12 +2,12 @@
 @import url(https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700);
 
 
-#content .WireTabs #_PageDocsTabDocs {
+#content .WireTabs #_AdminDocsTabDocs {
   color: #a00aea;
   font-weight: bolder;
 }
 
-#content .WireTabs #_PageDocsTabDocs:before {
+#content .WireTabs #_AdminDocsTabDocs:before {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -18,20 +18,20 @@
   content: "\f1cd\00a0 ";
 }
 
-#content .WireTabs #_PageDocsTabDocs:hover {
+#content .WireTabs #_AdminDocsTabDocs:hover {
   background: none;
   text-decoration: underline;
   border-color: transparent;
 }
 
 
-li#PageDocsTabDocs div.doc-container {
+li#AdminDocsTabDocs div.doc-container {
 	padding-bottom: 20px;
 	margin-bottom: 20px;
 	border-bottom: 1px dotted #ccc;
 }
 
-#PageDocsTabDocs .InputfieldContent {
+#AdminDocsTabDocs .InputfieldContent {
 /* 	background-color: #F0F3F7; */
 }
 
@@ -50,7 +50,7 @@ li#PageDocsTabDocs div.doc-container {
     margin-bottom: 10px;
 }
 
-#PageDocsTabDocs .InputfieldContent #docs ul li:before {
+#AdminDocsTabDocs .InputfieldContent #docs ul li:before {
  content: "\0BB \020";
  }
 
