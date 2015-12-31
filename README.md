@@ -21,3 +21,7 @@ To have a global docs overview page, which renders all of the docs in an accordi
 
 
 ## Example Docs Tab
+
+![Desc](https://raw.githubusercontent.com/outflux3/AdminDocsTab/master/images/admin_docs.jpg)
+
+ 
